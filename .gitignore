@@ -4,3 +4,8 @@ dist
 *.log
 .env
 .env.local
+
+# Database
+*.db
+*.db-journal
+prisma/dev.db
