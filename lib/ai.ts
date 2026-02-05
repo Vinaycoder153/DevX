@@ -1,7 +1,12 @@
 import OpenAI from 'openai';
 
+if (!process.env.OPENAI_API_KEY) {
+  console.error('ERROR: OPENAI_API_KEY environment variable is not set!');
+  console.error('Please add your OpenAI API key to the .env file');
+}
+
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'sk-test-key',
+  apiKey: process.env.OPENAI_API_KEY || '',
 });
 
 export interface ChatMessage {
@@ -30,6 +35,11 @@ export class AIService {
     messages: ChatMessage[],
     context?: Record<string, unknown>
   ): Promise<AIResponse> {
+    // Check if API key is configured
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured. Please add OPENAI_API_KEY to your .env file.');
+    }
+
     try {
       // Build system prompt based on context
       const systemPrompt = this.buildSystemPrompt(context);

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { marked } from 'marked';
 import hljs from 'highlight.js';
+import DOMPurify from 'dompurify';
 import 'highlight.js/styles/github-dark.css';
 
 interface Message {
@@ -20,12 +21,14 @@ interface ChatWidgetProps {
   };
 }
 
-// Helper function to render markdown with syntax highlighting
+// Helper function to render markdown with syntax highlighting (sanitized)
 const renderMarkdown = (content: string): string => {
   const html = marked.parse(content, { async: false }) as string;
+  // Sanitize HTML to prevent XSS attacks
+  const sanitized = DOMPurify.sanitize(html);
   // Apply syntax highlighting to code blocks
   const div = document.createElement('div');
-  div.innerHTML = html;
+  div.innerHTML = sanitized;
   div.querySelectorAll('pre code').forEach((block) => {
     hljs.highlightElement(block as HTMLElement);
   });

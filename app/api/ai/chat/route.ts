@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Track usage
-    await prisma.aIUsage.create({
+    await prisma.aiUsage.create({
       data: {
         userId: user.id,
         tokensUsed: aiResponse.usage.tokens,
